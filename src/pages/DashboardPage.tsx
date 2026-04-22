@@ -2,6 +2,7 @@ import { useBookings } from '@/features/bookings/hooks/useBookings';
 import { useServices } from '@/features/services/hooks/useServices';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CalendarDays, Settings, Users, ClipboardList } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 interface StatCardProps {
   title: string;
@@ -14,7 +15,7 @@ interface StatCardProps {
   };
 }
 
-const StatCard = ({ title, value, description, icon: Icon, trend }: StatCardProps) => (
+const StatCard = ({ title, value, description, icon: Icon }: StatCardProps) => (
   <Card className="border-slate-200/60 dark:border-slate-800 shadow-sm transition-all hover:shadow-md">
     <CardHeader className="flex flex-row items-center justify-between pb-2">
       <CardTitle className="text-sm font-medium text-muted-foreground">{title}</CardTitle>
@@ -25,21 +26,12 @@ const StatCard = ({ title, value, description, icon: Icon, trend }: StatCardProp
     <CardContent>
       <div className="text-3xl font-bold tracking-tight text-foreground">{value}</div>
       <div className="mt-1 flex items-center gap-2 text-sm">
-        {trend && (
-          <span className={cn(
-            "flex items-center font-medium",
-            trend.isPositive ? "text-emerald-600 dark:text-emerald-500" : "text-rose-600 dark:text-rose-500"
-          )}>
-            {trend.isPositive ? "+" : "-"}{Math.abs(trend.value)}%
-          </span>
-        )}
         <span className="text-muted-foreground">{description}</span>
       </div>
     </CardContent>
   </Card>
 );
 
-import { cn } from '@/lib/utils';
 
 export const DashboardPage = () => {
   const { data: bookings, isLoading: isLoadingBookings } = useBookings();
@@ -49,23 +41,20 @@ export const DashboardPage = () => {
     {
       title: 'Total Bookings',
       value: isLoadingBookings ? '...' : bookings?.length || 0,
-      description: 'from last month',
+      description: 'upcoming bookings',
       icon: ClipboardList,
-      trend: { value: 12, isPositive: true },
     },
     {
       title: 'Services Offered',
       value: isLoadingServices ? '...' : services?.length || 0,
       description: 'active services',
       icon: Settings,
-      trend: { value: 2, isPositive: true },
     },
     {
       title: 'Active Users',
       value: isLoadingBookings ? '...' : new Set(bookings?.map(b => b.user_id)).size || 0,
       description: 'unique customers',
       icon: Users,
-      trend: { value: 5.4, isPositive: true },
     },
     {
       title: 'Next Appointment',
@@ -134,22 +123,22 @@ export const DashboardPage = () => {
             </p>
             {/* Quick Actions Placeholders */}
             <div className="grid gap-2">
-               <div className="flex items-center gap-3 rounded-lg border border-slate-200/60 p-3 hover:bg-slate-50 dark:border-slate-800 dark:hover:bg-slate-800/50 cursor-pointer transition-colors">
+               <Link to="/schedule" className="flex items-center gap-3 rounded-lg border border-slate-200/60 p-3 hover:bg-slate-50 dark:border-slate-800 dark:hover:bg-slate-800/50 cursor-pointer transition-colors shadow-sm active:scale-[0.98]">
                   <div className="bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400 p-2 rounded-md">
-                     <ClipboardList size={18} />
+                     <CalendarDays size={18} />
                   </div>
                   <div>
                     <p className="text-sm font-medium">View Schedule</p>
                   </div>
-               </div>
-               <div className="flex items-center gap-3 rounded-lg border border-slate-200/60 p-3 hover:bg-slate-50 dark:border-slate-800 dark:hover:bg-slate-800/50 cursor-pointer transition-colors">
+               </Link>
+               <Link to="/services/new" className="flex items-center gap-3 rounded-lg border border-slate-200/60 p-3 hover:bg-slate-50 dark:border-slate-800 dark:hover:bg-slate-800/50 cursor-pointer transition-colors shadow-sm active:scale-[0.98]">
                   <div className="bg-sky-100 text-sky-600 dark:bg-sky-900/30 dark:text-sky-400 p-2 rounded-md">
                      <Settings size={18} />
                   </div>
                   <div>
                     <p className="text-sm font-medium">Add New Service</p>
                   </div>
-               </div>
+               </Link>
             </div>
           </CardContent>
         </Card>

@@ -4,12 +4,13 @@ import {
   Settings,
   LogOut,
   ClipboardList,
-  Tent, // as a logo icon
+  Tent,
+  CalendarDays,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/features/auth/hooks/useAuth';
-
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 interface SidebarItemProps {
   to: string;
   icon: React.ElementType;
@@ -39,6 +40,7 @@ export const Sidebar = () => {
   const menuItems = [
     { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
     { to: '/bookings', icon: ClipboardList, label: 'Bookings' },
+    { to: '/schedule', icon: CalendarDays, label: 'Schedule' },
     { to: '/services', icon: Settings, label: 'Services' },
   ];
 
@@ -65,14 +67,22 @@ export const Sidebar = () => {
       </div>
 
       <div className="p-4 mt-auto">
-        <Button
-          variant="ghost"
-          className="w-full justify-start gap-3 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
-          onClick={() => logout()}
-        >
-          <LogOut className="h-4 w-4" />
-          <span>Log out</span>
-        </Button>
+        <ConfirmDialog
+          title="Log out"
+          description="Are you sure you want to log out? You will need to sign in again to access the dashboard."
+          onConfirm={() => logout()}
+          confirmText="Log out"
+          variant="destructive"
+          trigger={
+            <Button
+              variant="ghost"
+              className="w-full justify-start gap-3 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+            >
+              <LogOut className="h-4 w-4" />
+              <span>Log out</span>
+            </Button>
+          }
+        />
       </div>
     </aside>
   );

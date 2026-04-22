@@ -1,7 +1,8 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { authApi } from '../api/authApi';
 import { z } from 'zod';
 import { useNavigate } from 'react-router-dom';
+import { queryClient } from '@/lib/queryClient';
 
 export const loginSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -11,7 +12,6 @@ export const loginSchema = z.object({
 export type LoginFormValues = z.infer<typeof loginSchema>;
 
 export const useAuth = () => {
-  const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   const { data: session, isLoading: isSessionLoading } = useQuery({

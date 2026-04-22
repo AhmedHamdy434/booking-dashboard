@@ -8,6 +8,8 @@ const LoginPage = lazy(() => import('@/features/auth/LoginPage'));
 const DashboardPage = lazy(() => import('@/pages/DashboardPage'));
 const ServicesPage = lazy(() => import('@/features/services/ServicesPage'));
 const NewServicePage = lazy(() => import('@/features/services/NewServicePage'));
+const EditServicePage = lazy(() => import('@/features/services/EditServicePage'));
+const SchedulePage = lazy(() => import('@/features/schedule/SchedulePage'));
 const BookingsPage = lazy(() => import('@/features/bookings/BookingsPage'));
 
 const PageLoader = () => (
@@ -32,6 +34,8 @@ export const AppRouter = () => {
               <Route path="/dashboard" element={<DashboardPage />} />
               <Route path="/services" element={<ServicesPage />} />
               <Route path="/services/new" element={<NewServicePage />} />
+              <Route path="/services/edit/:id" element={<EditServicePage />} />
+              <Route path="/schedule" element={<SchedulePage />} />
               <Route path="/bookings" element={<BookingsPage />} />
             </Route>
           </Route>

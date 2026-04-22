@@ -9,15 +9,34 @@ import {
 import type { Service } from '@/types/service';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
-import { Settings, Plus } from 'lucide-react';
+import { Settings, Plus, MoreVertical, Pencil, Trash2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-
+import { useDeleteService } from '../hooks/useServices';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 interface ServicesTableProps {
   services: Service[] | undefined;
   isLoading: boolean;
 }
 
 export const ServicesTable = ({ services, isLoading }: ServicesTableProps) => {
+  const { mutate: deleteService } = useDeleteService();
+
   if (isLoading) {
     return (
       <div className="space-y-2">
@@ -56,6 +75,7 @@ export const ServicesTable = ({ services, isLoading }: ServicesTableProps) => {
             <TableHead>ID</TableHead>
             <TableHead>Service Name</TableHead>
             <TableHead>Duration (mins)</TableHead>
+            <TableHead className="w-16">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -66,6 +86,47 @@ export const ServicesTable = ({ services, isLoading }: ServicesTableProps) => {
               </TableCell>
               <TableCell className="font-medium">{service.name}</TableCell>
               <TableCell>{service.duration} mins</TableCell>
+              <TableCell>
+                <AlertDialog>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="icon">
+                        <MoreVertical className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem asChild>
+                        <Link to={`/services/edit/${service.id}`} className="flex items-center">
+                          <Pencil className="mr-2 h-4 w-4" /> Edit
+                        </Link>
+                      </DropdownMenuItem>
+                      <AlertDialogTrigger asChild>
+                        <DropdownMenuItem className="text-destructive focus:bg-destructive/10 focus:text-destructive">
+                          <Trash2 className="mr-2 h-4 w-4" /> Delete
+                        </DropdownMenuItem>
+                      </AlertDialogTrigger>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This will permanently delete the service "{service.name}". This action cannot be undone.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={() => deleteService(service.id)}
+                        className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                      >
+                        Delete
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

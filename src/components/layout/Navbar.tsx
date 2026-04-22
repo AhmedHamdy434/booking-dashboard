@@ -19,7 +19,7 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { LogOut, User } from 'lucide-react';
-
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 export const Navbar = () => {
   const location = useLocation();
   const { user, logout } = useAuth();
@@ -94,10 +94,19 @@ export const Navbar = () => {
               <User className="mr-2 h-4 w-4 text-muted-foreground" />
               <span>Profile</span>
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => logout()} className="text-destructive focus:bg-destructive/10 focus:text-destructive">
-              <LogOut className="mr-2 h-4 w-4" />
-              <span>Log out</span>
-            </DropdownMenuItem>
+            <ConfirmDialog
+              title="Log out"
+              description="Are you sure you want to log out? You will need to sign in again to access the dashboard."
+              onConfirm={() => logout()}
+              confirmText="Log out"
+              variant="destructive"
+              trigger={
+                <DropdownMenuItem onSelect={(e) => e.preventDefault()} className="text-destructive focus:bg-destructive/10 focus:text-destructive cursor-pointer">
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Log out</span>
+                </DropdownMenuItem>
+              }
+            />
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
