@@ -1,0 +1,107 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/geist";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --text: #6b6375;
+  --text-h: #08060d;
+  --bg: #fff;
+  --border: oklch(0.922 0 0);
+  --code-bg: #f4f3ec;
+  --accent: oklch(0.97 0 0);
+  --accent-bg: rgba(170, 59, 255, 0.1);
+  --accent-border: rgba(170, 59, 255, 0.5);
+  --social-bg: rgba(244, 243, 236, 0.5);
+  --shadow:
+    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+
+  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --mono: ui-monospace, Consolas, monospace;
+
+  font: 18px/145% var(--sans);
+  letter-spacing: 0.18px;
+  color-scheme: light dark;
+  color: var(--text);
+  background: var(--bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  @media (max-width: 1024px) {
+    font-size: 16px;
+  }
+
+  --background: #f8fafc;
+  --foreground: #020617;
+  --card: #ffffff;
+  --card-foreground: #020617;
+  --popover: #ffffff;
+  --popover-foreground: #020617;
+  --primary: #7c3aed;
+  --primary-foreground: #ffffff;
+  --secondary: #f1f5f9;
+  --secondary-foreground: #0f172a;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --accent: #f1f5f9;
+  --accent-foreground: #0f172a;
+  --destructive: #ef4444;
+  --destructive-foreground: #f8fafc;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #7c3aed;
+  --radius: 0.75rem;
+
+  --sidebar: #ffffff;
+  --sidebar-foreground: #0f172a;
+  --sidebar-primary: #7c3aed;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f1f5f9;
+  --sidebar-accent-foreground: #0f172a;
+  --sidebar-border: #e2e8f0;
+  --sidebar-ring: #7c3aed;
+}
+
+.dark {
+  --background: #020617;
+  --foreground: #f8fafc;
+  --card: #0f172a;
+  --card-foreground: #f8fafc;
+  --popover: #0f172a;
+  --popover-foreground: #f8fafc;
+  --primary: #8b5cf6;
+  --primary-foreground: #f8fafc;
+  --secondary: #1e293b;
+  --secondary-foreground: #f8fafc;
+  --muted: #1e293b;
+  --muted-foreground: #94a3b8;
+  --accent: #1e293b;
+  --accent-foreground: #f8fafc;
+  --destructive: #ef4444;
+  --destructive-foreground: #f8fafc;
+  --border: #1e293b;
+  --input: #1e293b;
+  --ring: #8b5cf6;
+
+  --sidebar: #0f172a;
+  --sidebar-foreground: #f8fafc;
+  --sidebar-primary: #8b5cf6;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #1e293b;
+  --sidebar-accent-foreground: #f8fafc;
+  --sidebar-border: #1e293b;
+  --sidebar-ring: #8b5cf6;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;}
+  body {
+    @apply bg-background text-foreground;}
+  html {
+    @apply font-sans;}}

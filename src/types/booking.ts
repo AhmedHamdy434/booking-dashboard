@@ -1,0 +1,12 @@
+export interface Booking {
+  id: string;
+  user_id: string;
+  service_id: string;
+  date: string;
+  time: string;
+  created_at: string;
+  // Join fields from services table
+  services?: {
+    name: string;
+  };
+}
