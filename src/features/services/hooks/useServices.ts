@@ -8,6 +8,7 @@ import { queryClient } from '@/lib/queryClient';
 export const serviceSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
   duration: z.number().min(1, 'Duration must be at least 1 minute'),
+  price: z.number().min(0, 'Price must be 0 or greater'),
 });
 
 export type ServiceFormValues = z.infer<typeof serviceSchema>;

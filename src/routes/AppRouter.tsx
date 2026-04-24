@@ -11,6 +11,9 @@ const NewServicePage = lazy(() => import('@/features/services/NewServicePage'));
 const EditServicePage = lazy(() => import('@/features/services/EditServicePage'));
 const SchedulePage = lazy(() => import('@/features/schedule/SchedulePage'));
 const BookingsPage = lazy(() => import('@/features/bookings/BookingsPage'));
+const NewBookingPage = lazy(() => import('@/features/bookings/NewBookingPage'));
+const BarbersPage = lazy(() => import('@/features/barbers/BarbersPage'));
+const AvailabilityPage = lazy(() => import('@/features/barbers/AvailabilityPage'));
 
 const PageLoader = () => (
   <div className="flex items-center justify-center h-[50vh]">
@@ -37,6 +40,9 @@ export const AppRouter = () => {
               <Route path="/services/edit/:id" element={<EditServicePage />} />
               <Route path="/schedule" element={<SchedulePage />} />
               <Route path="/bookings" element={<BookingsPage />} />
+              <Route path="/bookings/new" element={<NewBookingPage />} />
+              <Route path="/barbers" element={<BarbersPage />} />
+              <Route path="/barbers/availability" element={<AvailabilityPage />} />
             </Route>
           </Route>
 

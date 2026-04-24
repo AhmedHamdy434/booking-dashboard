@@ -6,6 +6,8 @@ import {
   ClipboardList,
   Tent,
   CalendarDays,
+  Scissors,
+  Clock,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -41,6 +43,8 @@ export const Sidebar = () => {
     { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
     { to: '/bookings', icon: ClipboardList, label: 'Bookings' },
     { to: '/schedule', icon: CalendarDays, label: 'Schedule' },
+    { to: '/barbers', icon: Scissors, label: 'Barbers' },
+    { to: '/barbers/availability', icon: Clock, label: 'Availability' },
     { to: '/services', icon: Settings, label: 'Services' },
   ];
 

@@ -26,6 +26,7 @@ export const EditServicePage = () => {
     defaultValues: {
       name: '',
       duration: 30,
+      price: 0,
     },
   });
 
@@ -34,6 +35,7 @@ export const EditServicePage = () => {
       form.reset({
         name: service.name,
         duration: service.duration,
+        price: service.price || 0,
       });
     }
   }, [service, form]);
@@ -92,6 +94,17 @@ export const EditServicePage = () => {
                   />
                 </FormControl>
                 <FormMessage>{form.formState.errors.duration?.message}</FormMessage>
+              </FormItem>
+
+              <FormItem>
+                <FormLabel error={!!form.formState.errors.price}>Price (EGP)</FormLabel>
+                <FormControl>
+                  <Input 
+                    type="number" 
+                    {...form.register('price', { valueAsNumber: true })} 
+                  />
+                </FormControl>
+                <FormMessage>{form.formState.errors.price?.message}</FormMessage>
               </FormItem>
 
               <div className="flex justify-end gap-4 pt-4">

@@ -8,6 +8,10 @@ export const bookingsApi = {
       .select(`
         *,
         services (
+          name,
+          duration
+        ),
+        barbers (
           name
         )
       `)
@@ -16,5 +20,16 @@ export const bookingsApi = {
       
     if (error) throw error;
     return data || [];
+  },
+
+  createBooking: async (booking: Omit<Booking, 'id' | 'created_at' | 'services' | 'barbers'>): Promise<Booking> => {
+    const { data, error } = await supabase
+      .from('bookings')
+      .insert([booking])
+      .select()
+      .maybeSingle();
+      
+    if (error) throw error;
+    return data;
   },
 };

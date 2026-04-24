@@ -75,6 +75,7 @@ export const ServicesTable = ({ services, isLoading }: ServicesTableProps) => {
             <TableHead>ID</TableHead>
             <TableHead>Service Name</TableHead>
             <TableHead>Duration (mins)</TableHead>
+            <TableHead>Price (EGP)</TableHead>
             <TableHead className="w-16">Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -86,6 +87,7 @@ export const ServicesTable = ({ services, isLoading }: ServicesTableProps) => {
               </TableCell>
               <TableCell className="font-medium">{service.name}</TableCell>
               <TableCell>{service.duration} mins</TableCell>
+              <TableCell>{service.price} EGP</TableCell>
               <TableCell>
                 <AlertDialog>
                   <DropdownMenu>

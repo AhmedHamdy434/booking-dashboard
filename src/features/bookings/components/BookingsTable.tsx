@@ -53,6 +53,7 @@ export const BookingsTable = ({ bookings, isLoading }: BookingsTableProps) => {
             <TableHead>Booking ID</TableHead>
             <TableHead>User ID</TableHead>
             <TableHead>Service</TableHead>
+            <TableHead>Barber</TableHead>
             <TableHead>Date</TableHead>
             <TableHead>Time</TableHead>
           </TableRow>
@@ -68,6 +69,9 @@ export const BookingsTable = ({ bookings, isLoading }: BookingsTableProps) => {
               </TableCell>
               <TableCell className="font-medium">
                 {booking.services?.name || 'Unknown Service'}
+              </TableCell>
+              <TableCell>
+                {booking.barbers?.name || 'Unknown Barber'}
               </TableCell>
               <TableCell>{booking.date}</TableCell>
               <TableCell>{booking.time}</TableCell>

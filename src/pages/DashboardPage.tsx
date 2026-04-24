@@ -1,7 +1,8 @@
 import { useBookings } from '@/features/bookings/hooks/useBookings';
 import { useServices } from '@/features/services/hooks/useServices';
+import { useBarbers } from '@/features/barbers/hooks/useBarbers';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { CalendarDays, Settings, Users, ClipboardList } from 'lucide-react';
+import { CalendarDays, Settings, Users, ClipboardList, Scissors } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 interface StatCardProps {
@@ -36,6 +37,7 @@ const StatCard = ({ title, value, description, icon: Icon }: StatCardProps) => (
 export const DashboardPage = () => {
   const { data: bookings, isLoading: isLoadingBookings } = useBookings();
   const { data: services, isLoading: isLoadingServices } = useServices();
+  const { data: barbers, isLoading: isLoadingBarbers } = useBarbers();
 
   const stats: StatCardProps[] = [
     {
@@ -57,10 +59,10 @@ export const DashboardPage = () => {
       icon: Users,
     },
     {
-      title: 'Next Appointment',
-      value: 'Today',
-      description: 'upcoming at 2:00 PM',
-      icon: CalendarDays,
+      title: 'Total Barbers',
+      value: isLoadingBarbers ? '...' : barbers?.length || 0,
+      description: 'active staff members',
+      icon: Scissors,
     },
   ];
 
@@ -137,6 +139,14 @@ export const DashboardPage = () => {
                   </div>
                   <div>
                     <p className="text-sm font-medium">Add New Service</p>
+                  </div>
+               </Link>
+               <Link to="/barbers" className="flex items-center gap-3 rounded-lg border border-slate-200/60 p-3 hover:bg-slate-50 dark:border-slate-800 dark:hover:bg-slate-800/50 cursor-pointer transition-colors shadow-sm active:scale-[0.98]">
+                  <div className="bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400 p-2 rounded-md">
+                     <Scissors size={18} />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium">Manage Barbers</p>
                   </div>
                </Link>
             </div>
