@@ -1,3 +1,5 @@
+export type BookingStatus = 'pending' | 'confirmed' | 'completed' | 'cancelled';
+
 export interface Booking {
   id: string;
   user_id: string;
@@ -5,6 +7,7 @@ export interface Booking {
   barber_id: string;
   date: string;
   time: string;
+  status: BookingStatus;
   created_at: string;
   // Join fields from services table
   services?: {

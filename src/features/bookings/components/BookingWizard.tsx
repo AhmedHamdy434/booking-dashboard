@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useServices } from '@/features/services/hooks/useServices';
 import { useBarbers, useBarberAvailability } from '@/features/barbers/hooks/useBarbers';
-import { useBookings, useCreateBooking } from '../hooks/useBookings';
+import { useCreateBooking } from '../hooks/useBookings';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -15,7 +15,6 @@ export const BookingWizard = ({ onComplete }: { onComplete?: () => void }) => {
   const { user } = useAuth();
   const { data: services, isLoading: isLoadingServices } = useServices();
   const { data: barbers, isLoading: isLoadingBarbers } = useBarbers();
-  const { data: allBookings } = useBookings();
   const { mutate: createBooking, isPending: isCreating } = useCreateBooking();
 
   const [step, setStep] = useState(1);
@@ -24,7 +23,7 @@ export const BookingWizard = ({ onComplete }: { onComplete?: () => void }) => {
   const [selectedDate, setSelectedDate] = useState<string>(format(new Date(), 'yyyy-MM-dd'));
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
 
-  const { data: availability, isLoading: isLoadingAvailability } = useBarberAvailability(selectedBarber?.id);
+  const { data: availability } = useBarberAvailability(selectedBarber?.id);
 
   // Filter out inactive barbers
   const activeBarbers = useMemo(() => barbers?.filter(b => b.is_active) || [], [barbers]);
@@ -57,6 +56,7 @@ export const BookingWizard = ({ onComplete }: { onComplete?: () => void }) => {
         barber_id: selectedBarber.id,
         date: selectedDate,
         time: selectedTime,
+        status: 'pending'
       },
       {
         onSuccess: () => {
