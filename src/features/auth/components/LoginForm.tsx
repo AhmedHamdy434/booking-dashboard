@@ -17,6 +17,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useTranslation } from "react-i18next";
 
 interface LoginFormProps {
   onSubmit: (data: LoginFormValues) => void;
@@ -24,6 +25,7 @@ interface LoginFormProps {
 }
 
 export const LoginForm = ({ onSubmit, isLoading }: LoginFormProps) => {
+  const { t } = useTranslation();
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -35,19 +37,19 @@ export const LoginForm = ({ onSubmit, isLoading }: LoginFormProps) => {
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader>
-        <CardTitle className="text-2xl font-bold">Login</CardTitle>
+        <CardTitle className="text-2xl font-bold">{t('auth.login_title')}</CardTitle>
         <CardDescription>
-          Enter your email and password to access the dashboard.
+          {t('auth.login_description')}
         </CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <FormItem>
-              <FormLabel error={!!form.formState.errors.email}>Email</FormLabel>
+              <FormLabel error={!!form.formState.errors.email}>{t('auth.email_label')}</FormLabel>
               <FormControl>
                 <Input 
-                  placeholder="admin@example.com" 
+                  placeholder={t('auth.email_placeholder')} 
                   {...form.register("email")} 
                 />
               </FormControl>
@@ -55,7 +57,7 @@ export const LoginForm = ({ onSubmit, isLoading }: LoginFormProps) => {
             </FormItem>
 
             <FormItem>
-              <FormLabel error={!!form.formState.errors.password}>Password</FormLabel>
+              <FormLabel error={!!form.formState.errors.password}>{t('auth.password_label')}</FormLabel>
               <FormControl>
                 <Input 
                   type="password" 
@@ -67,7 +69,7 @@ export const LoginForm = ({ onSubmit, isLoading }: LoginFormProps) => {
             </FormItem>
 
             <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Logging in..." : "Login"}
+              {isLoading ? t('auth.logging_in') : t('auth.login_button')}
             </Button>
           </form>
         </Form>

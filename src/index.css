@@ -2,6 +2,12 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/geist";
+@import "@fontsource/cairo";
+
+:root[lang="ar"] {
+  --sans: 'Cairo', system-ui, 'Segoe UI', Roboto, sans-serif;
+  --heading: 'Cairo', system-ui, 'Segoe UI', Roboto, sans-serif;
+}
 
 @custom-variant dark (&:is(.dark *));
 
@@ -31,66 +37,66 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  --background: #f8fafc;
-  --foreground: #020617;
+  --background: #fafafa;
+  --foreground: #1a1a1a;
   --card: #ffffff;
-  --card-foreground: #020617;
+  --card-foreground: #1a1a1a;
   --popover: #ffffff;
-  --popover-foreground: #020617;
-  --primary: #7c3aed;
-  --primary-foreground: #ffffff;
-  --secondary: #f1f5f9;
-  --secondary-foreground: #0f172a;
-  --muted: #f1f5f9;
-  --muted-foreground: #64748b;
-  --accent: #f1f5f9;
-  --accent-foreground: #0f172a;
+  --popover-foreground: #1a1a1a;
+  --primary: #c5a059;
+  --primary-foreground: #1a1a1a;
+  --secondary: #f5f5f5;
+  --secondary-foreground: #1a1a1a;
+  --muted: #f5f5f5;
+  --muted-foreground: #737373;
+  --accent: #f5f5f5;
+  --accent-foreground: #1a1a1a;
   --destructive: #ef4444;
-  --destructive-foreground: #f8fafc;
-  --border: #e2e8f0;
-  --input: #e2e8f0;
-  --ring: #7c3aed;
+  --destructive-foreground: #fafafa;
+  --border: #e5e5e5;
+  --input: #e5e5e5;
+  --ring: #c5a059;
   --radius: 0.75rem;
 
   --sidebar: #ffffff;
-  --sidebar-foreground: #0f172a;
-  --sidebar-primary: #7c3aed;
+  --sidebar-foreground: #1a1a1a;
+  --sidebar-primary: #c5a059;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #f1f5f9;
-  --sidebar-accent-foreground: #0f172a;
-  --sidebar-border: #e2e8f0;
-  --sidebar-ring: #7c3aed;
+  --sidebar-accent: #f5f5f5;
+  --sidebar-accent-foreground: #1a1a1a;
+  --sidebar-border: #e5e5e5;
+  --sidebar-ring: #c5a059;
 }
 
 .dark {
-  --background: #020617;
-  --foreground: #f8fafc;
-  --card: #0f172a;
-  --card-foreground: #f8fafc;
-  --popover: #0f172a;
-  --popover-foreground: #f8fafc;
-  --primary: #8b5cf6;
-  --primary-foreground: #f8fafc;
-  --secondary: #1e293b;
-  --secondary-foreground: #f8fafc;
-  --muted: #1e293b;
-  --muted-foreground: #94a3b8;
-  --accent: #1e293b;
-  --accent-foreground: #f8fafc;
+  --background: #0a0a0a;
+  --foreground: #e5e5e5;
+  --card: #141414;
+  --card-foreground: #e5e5e5;
+  --popover: #141414;
+  --popover-foreground: #e5e5e5;
+  --primary: #d4af37;
+  --primary-foreground: #0a0a0a;
+  --secondary: #1f1f1f;
+  --secondary-foreground: #e5e5e5;
+  --muted: #1f1f1f;
+  --muted-foreground: #a3a3a3;
+  --accent: #1f1f1f;
+  --accent-foreground: #e5e5e5;
   --destructive: #ef4444;
-  --destructive-foreground: #f8fafc;
-  --border: #1e293b;
-  --input: #1e293b;
-  --ring: #8b5cf6;
+  --destructive-foreground: #0a0a0a;
+  --border: #262626;
+  --input: #262626;
+  --ring: #d4af37;
 
-  --sidebar: #0f172a;
-  --sidebar-foreground: #f8fafc;
-  --sidebar-primary: #8b5cf6;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #1e293b;
-  --sidebar-accent-foreground: #f8fafc;
-  --sidebar-border: #1e293b;
-  --sidebar-ring: #8b5cf6;
+  --sidebar: #141414;
+  --sidebar-foreground: #e5e5e5;
+  --sidebar-primary: #d4af37;
+  --sidebar-primary-foreground: #0a0a0a;
+  --sidebar-accent: #1f1f1f;
+  --sidebar-accent-foreground: #e5e5e5;
+  --sidebar-border: #262626;
+  --sidebar-ring: #d4af37;
 }
 @theme {
   --color-background: var(--background);
@@ -109,7 +115,7 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border); /* هنا تيلويند بيعرف إن فيه لون اسمه border */
+  --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
 
@@ -124,6 +130,11 @@
   * {
     @apply border-border outline-ring/50;}
   body {
-    @apply bg-background text-foreground;}
+    @apply bg-background text-foreground;
+    transition: background-color 300ms ease, color 300ms ease, border-color 300ms ease;
+  }
+  .bg-card, .bg-primary, .bg-muted, .border, .text-foreground, .text-muted-foreground {
+    transition: background-color 300ms ease, color 300ms ease, border-color 300ms ease;
+  }
   html {
     @apply font-sans;}}

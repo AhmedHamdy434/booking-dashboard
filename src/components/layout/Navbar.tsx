@@ -20,22 +20,33 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { LogOut, User } from 'lucide-react';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { LanguageSwitcher } from '@/components/shared/LanguageSwitcher';
+import { ModeToggle } from '@/features/theme/components/ModeToggle';
+import { useTranslation } from 'react-i18next';
+
 export const Navbar = () => {
+  const { t } = useTranslation();
   const location = useLocation();
   const { user, logout } = useAuth();
 
   const getPageInfo = (pathname: string) => {
     switch (pathname) {
       case '/dashboard':
-        return { title: 'Dashboard', path: [{ name: 'Overview' }] };
+        return { title: t('navbar.dashboard'), path: [{ name: t('navbar.overview') }] };
       case '/services':
-        return { title: 'Services', path: [{ name: 'Services Management' }] };
+        return { title: t('navbar.services'), path: [{ name: t('navbar.services_mgmt') }] };
       case '/services/new':
-        return { title: 'Services', path: [{ name: 'Services', link: '/services' }, { name: 'Add New' }] };
+        return { title: t('navbar.services'), path: [{ name: t('navbar.services'), link: '/services' }, { name: t('navbar.add_new') }] };
       case '/bookings':
-        return { title: 'Bookings', path: [{ name: 'Bookings Management' }] };
+        return { title: t('navbar.bookings'), path: [{ name: t('navbar.bookings_mgmt') }] };
+      case '/schedule':
+        return { title: t('navbar.bookings'), path: [{ name: t('navbar.bookings'), link: '/bookings' }, { name: t('schedule.title') }] };
+      case '/barbers':
+        return { title: t('barbers.title'), path: [{ name: t('barbers.title') }] };
+      case '/barbers/availability':
+        return { title: t('barbers.title'), path: [{ name: t('barbers.title'), link: '/barbers' }, { name: t('availability.title') }] };
       default:
-        return { title: 'Admin Panel', path: [] };
+        return { title: t('navbar.admin_panel'), path: [] };
     }
   };
 
@@ -53,7 +64,7 @@ export const Navbar = () => {
             </BreadcrumbItem>
             {path.map((item, index) => (
               <div key={index} className="flex items-center">
-                <BreadcrumbSeparator />
+                <BreadcrumbSeparator className="rtl:rotate-180" />
                 <BreadcrumbItem>
                   {item.link ? (
                     <BreadcrumbLink asChild>
@@ -70,6 +81,8 @@ export const Navbar = () => {
       </div>
 
       <div className="flex items-center gap-4 h-full">
+        <LanguageSwitcher />
+        <ModeToggle />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="relative h-10 w-10 rounded-full">
@@ -83,7 +96,7 @@ export const Navbar = () => {
           <DropdownMenuContent className="w-56" align="end" forceMount>
             <DropdownMenuLabel className="font-normal">
               <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium leading-none">Administrator</p>
+                <p className="text-sm font-medium leading-none">{t('navbar.administrator')}</p>
                 <p className="text-xs leading-none text-muted-foreground">
                   {user?.email}
                 </p>
@@ -91,19 +104,19 @@ export const Navbar = () => {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <User className="mr-2 h-4 w-4 text-muted-foreground" />
-              <span>Profile</span>
+              <User className="mr-2 h-4 w-4 ml-2 mr-2 text-muted-foreground" />
+              <span>{t('navbar.profile')}</span>
             </DropdownMenuItem>
             <ConfirmDialog
-              title="Log out"
-              description="Are you sure you want to log out? You will need to sign in again to access the dashboard."
+              title={t('navbar.logout_title')}
+              description={t('navbar.logout_desc')}
               onConfirm={() => logout()}
-              confirmText="Log out"
+              confirmText={t('navbar.logout_title')}
               variant="destructive"
               trigger={
                 <DropdownMenuItem onSelect={(e) => e.preventDefault()} className="text-destructive focus:bg-destructive/10 focus:text-destructive cursor-pointer">
-                  <LogOut className="mr-2 h-4 w-4" />
-                  <span>Log out</span>
+                  <LogOut className="mr-2 h-4 w-4 ml-2 mr-2" />
+                  <span>{t('navbar.logout_title')}</span>
                 </DropdownMenuItem>
               }
             />

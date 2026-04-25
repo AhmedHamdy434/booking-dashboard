@@ -5,14 +5,17 @@ import interactionPlugin from '@fullcalendar/interaction';
 import { useBookings } from '@/features/bookings/hooks/useBookings';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2, Calendar as CalendarIcon } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import arLocale from '@fullcalendar/core/locales/ar';
 
 export const SchedulePage = () => {
+  const { t, i18n } = useTranslation();
   const { data: bookings, isLoading } = useBookings();
 
   // Transform bookings to FullCalendar events
   const events = bookings?.map((booking) => ({
     id: booking.id,
-    title: booking.services?.name || 'Booking',
+    title: booking.services?.name || t('bookings.unknown_service'),
     start: `${booking.date}T${booking.time}`,
     // Assuming duration is 30 mins if not specified, or we could fetch it
     extendedProps: {
@@ -28,31 +31,35 @@ export const SchedulePage = () => {
     );
   }
 
+  const isRtl = i18n.language === 'ar';
+
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="flex flex-col gap-1">
         <h1 className="text-3xl font-bold tracking-tight text-foreground flex items-center gap-2">
            <CalendarIcon className="h-8 w-8 text-primary" />
-           Business Schedule
+           {t('schedule.title')}
         </h1>
         <p className="text-muted-foreground">
-          View and manage your appointments across different time scales.
+          {t('schedule.subtitle')}
         </p>
       </div>
 
       <Card className="border-slate-200/60 dark:border-slate-800 shadow-sm overflow-hidden">
         <CardHeader className="bg-slate-50/50 dark:bg-slate-900/50 border-b border-slate-200/60 dark:border-slate-800">
-          <CardTitle>Calendar View</CardTitle>
+          <CardTitle>{t('schedule.calendar_view')}</CardTitle>
         </CardHeader>
         <CardContent className="p-0 sm:p-6">
-          <div className="calendar-container">
+          <div className="calendar-container" dir={isRtl ? 'rtl' : 'ltr'}>
             <FullCalendar
               plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
               initialView="dayGridMonth"
+              locale={i18n.language === 'ar' ? arLocale : 'en'}
+              direction={isRtl ? 'rtl' : 'ltr'}
               headerToolbar={{
-                left: 'prev,next today',
+                left: isRtl ? 'dayGridMonth,timeGridWeek,timeGridDay' : 'prev,next today',
                 center: 'title',
-                right: 'dayGridMonth,timeGridWeek,timeGridDay',
+                right: isRtl ? 'prev,next today' : 'dayGridMonth,timeGridWeek,timeGridDay',
               }}
               events={events}
               height="auto"
@@ -114,6 +121,20 @@ export const SchedulePage = () => {
           font-size: 0.875rem;
           padding: 8px !important;
           color: var(--muted-foreground);
+        }
+        /* RTL Fixes for FullCalendar buttons */
+        [dir="rtl"] .fc .fc-button-group > .fc-button:not(:last-child) {
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+          border-top-right-radius: 0.375rem;
+          border-bottom-right-radius: 0.375rem;
+          margin-left: -1px;
+        }
+        [dir="rtl"] .fc .fc-button-group > .fc-button:not(:first-child) {
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 0;
+          border-top-left-radius: 0.375rem;
+          border-bottom-left-radius: 0.375rem;
         }
       `}</style>
     </div>

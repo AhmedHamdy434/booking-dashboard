@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ProtectedRoute } from './ProtectedRoute';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useTranslation } from 'react-i18next';
 
 const LoginPage = lazy(() => import('@/features/auth/LoginPage'));
 const DashboardPage = lazy(() => import('@/pages/DashboardPage'));
@@ -15,14 +16,17 @@ const NewBookingPage = lazy(() => import('@/features/bookings/NewBookingPage'));
 const BarbersPage = lazy(() => import('@/features/barbers/BarbersPage'));
 const AvailabilityPage = lazy(() => import('@/features/barbers/AvailabilityPage'));
 
-const PageLoader = () => (
-  <div className="flex items-center justify-center h-[50vh]">
-    <div className="flex flex-col items-center gap-4">
-      <Skeleton className="h-12 w-12 rounded-full" />
-      <p className="text-sm text-muted-foreground animate-pulse">Loading page...</p>
+const PageLoader = () => {
+  const { t } = useTranslation();
+  return (
+    <div className="flex items-center justify-center h-[50vh]">
+      <div className="flex flex-col items-center gap-4">
+        <Skeleton className="h-12 w-12 rounded-full" />
+        <p className="text-sm text-muted-foreground animate-pulse">{t('wizard.loading_page')}</p>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export const AppRouter = () => {
   return (

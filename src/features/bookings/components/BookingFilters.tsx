@@ -4,21 +4,23 @@ import { URLDatePicker } from '@/components/shared/URLDatePicker';
 import { User, Tag } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export const BookingFilters = () => {
+  const { t } = useTranslation();
   const { data: barbers } = useBarbers();
 
   const barberOptions = useMemo(() => [
-    { label: 'All Barbers', value: 'all' },
+    { label: t('bookings.all_barbers'), value: 'all' },
     ...(barbers?.map(b => ({ label: b.name, value: b.id })) || [])
-  ], [barbers]);
+  ], [barbers, t]);
 
   const statusOptions = [
-    { label: 'All Statuses', value: 'all' },
-    { label: 'Pending', value: 'pending' },
-    { label: 'Confirmed', value: 'confirmed' },
-    { label: 'Completed', value: 'completed' },
-    { label: 'Cancelled', value: 'cancelled' },
+    { label: t('bookings.all_statuses'), value: 'all' },
+    { label: t('bookings.status_pending'), value: 'pending' },
+    { label: t('bookings.status_confirmed'), value: 'confirmed' },
+    { label: t('bookings.status_completed'), value: 'completed' },
+    { label: t('bookings.status_cancelled'), value: 'cancelled' },
   ];
 
   return (
@@ -26,29 +28,29 @@ export const BookingFilters = () => {
       <CardContent className="p-3 sm:p-4">
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <URLSelect 
-            label="Status" 
+            label={t('bookings.status')} 
             paramKey="status" 
             options={statusOptions} 
             icon={Tag} 
           />
 
           <URLSelect 
-            label="Barber" 
+            label={t('bookings.barber')} 
             paramKey="barberId" 
             options={barberOptions} 
             icon={User} 
           />
 
           <URLDatePicker 
-            label="From Date" 
+            label={t('bookings.from_date')} 
             paramKey="startDate" 
-            placeholder="Start date"
+            placeholder={t('bookings.start_date_placeholder')}
           />
 
           <URLDatePicker 
-            label="To Date" 
+            label={t('bookings.to_date')} 
             paramKey="endDate" 
-            placeholder="End date"
+            placeholder={t('bookings.end_date_placeholder')}
           />
         </div>
       </CardContent>

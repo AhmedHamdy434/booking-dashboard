@@ -20,6 +20,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface BarberDialogProps {
   open: boolean;
@@ -28,6 +29,7 @@ interface BarberDialogProps {
 }
 
 export const BarberDialog = ({ open, onOpenChange, barber }: BarberDialogProps) => {
+  const { t } = useTranslation();
   const { mutate: createBarber, isPending: isCreating } = useCreateBarber();
   const { mutate: updateBarber, isPending: isUpdating } = useUpdateBarber();
 
@@ -71,7 +73,7 @@ export const BarberDialog = ({ open, onOpenChange, barber }: BarberDialogProps) 
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>{isEditing ? 'Edit Barber' : 'Add New Barber'}</DialogTitle>
+          <DialogTitle>{isEditing ? t('barbers.edit_barber') : t('barbers.add_barber')}</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -80,9 +82,9 @@ export const BarberDialog = ({ open, onOpenChange, barber }: BarberDialogProps) 
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>{t('barbers.name_label')}</FormLabel>
                   <FormControl>
-                    <Input placeholder="Barber's name" {...field} />
+                    <Input placeholder={t('barbers.name_placeholder')} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -94,7 +96,7 @@ export const BarberDialog = ({ open, onOpenChange, barber }: BarberDialogProps) 
               render={({ field }) => (
                 <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
                   <div className="space-y-0.5">
-                    <FormLabel>Active Status</FormLabel>
+                    <FormLabel>{t('barbers.active_status')}</FormLabel>
                   </div>
                   <FormControl>
                     <Switch
@@ -111,10 +113,10 @@ export const BarberDialog = ({ open, onOpenChange, barber }: BarberDialogProps) 
                 variant="outline"
                 onClick={() => onOpenChange(false)}
               >
-                Cancel
+                {t('common.cancel')}
               </Button>
               <Button type="submit" disabled={isPending}>
-                {isPending ? 'Saving...' : 'Save'}
+                {isPending ? t('common.saving') : t('common.save')}
               </Button>
             </div>
           </form>

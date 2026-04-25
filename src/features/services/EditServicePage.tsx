@@ -14,8 +14,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export const EditServicePage = () => {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { data: service, isLoading: isLoadingService } = useService(id);
@@ -61,24 +63,24 @@ export const EditServicePage = () => {
       <div className="flex items-center gap-4">
         <Button variant="outline" size="icon" asChild>
           <Link to="/services">
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="h-4 w-4 rtl:rotate-180" />
           </Link>
         </Button>
-        <h1 className="text-3xl font-bold tracking-tight text-foreground">Edit Service</h1>
+        <h1 className="text-3xl font-bold tracking-tight text-foreground">{t('services.edit_title')}</h1>
       </div>
 
       <Card className="max-w-2xl border-slate-200/60 dark:border-slate-800 shadow-sm">
         <CardHeader>
-          <CardTitle>Service Details</CardTitle>
+          <CardTitle>{t('services.details')}</CardTitle>
         </CardHeader>
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <FormItem>
-                <FormLabel error={!!form.formState.errors.name}>Service Name</FormLabel>
+                <FormLabel error={!!form.formState.errors.name}>{t('services.name_label')}</FormLabel>
                 <FormControl>
                   <Input 
-                    placeholder="e.g. Haircut, Dental Checkup" 
+                    placeholder={t('services.name_placeholder')} 
                     {...form.register('name')} 
                   />
                 </FormControl>
@@ -86,7 +88,7 @@ export const EditServicePage = () => {
               </FormItem>
 
               <FormItem>
-                <FormLabel error={!!form.formState.errors.duration}>Duration (minutes)</FormLabel>
+                <FormLabel error={!!form.formState.errors.duration}>{t('services.duration_label')}</FormLabel>
                 <FormControl>
                   <Input 
                     type="number" 
@@ -97,7 +99,7 @@ export const EditServicePage = () => {
               </FormItem>
 
               <FormItem>
-                <FormLabel error={!!form.formState.errors.price}>Price (EGP)</FormLabel>
+                <FormLabel error={!!form.formState.errors.price}>{t('services.price_label')}</FormLabel>
                 <FormControl>
                   <Input 
                     type="number" 
@@ -109,10 +111,10 @@ export const EditServicePage = () => {
 
               <div className="flex justify-end gap-4 pt-4">
                 <Button variant="outline" asChild disabled={isUpdating}>
-                  <Link to="/services">Cancel</Link>
+                  <Link to="/services">{t('common.cancel')}</Link>
                 </Button>
                 <Button type="submit" disabled={isUpdating}>
-                  {isUpdating ? 'Saving Changes...' : 'Save Changes'}
+                  {isUpdating ? t('services.saving_changes') : t('services.save_changes')}
                 </Button>
               </div>
             </form>

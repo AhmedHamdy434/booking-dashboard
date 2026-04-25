@@ -29,12 +29,15 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { useTranslation } from 'react-i18next';
+
 interface ServicesTableProps {
   services: Service[] | undefined;
   isLoading: boolean;
 }
 
 export const ServicesTable = ({ services, isLoading }: ServicesTableProps) => {
+  const { t } = useTranslation();
   const { mutate: deleteService } = useDeleteService();
 
   if (isLoading) {
@@ -50,17 +53,17 @@ export const ServicesTable = ({ services, isLoading }: ServicesTableProps) => {
 
   if (!services || services.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-24 px-4 text-center border border-dashed border-slate-200 dark:border-slate-800 rounded-2xl bg-slate-50/50 dark:bg-slate-900/20">
+      <div className="flex flex-col items-center justify-center py-24 px-4 text-center border border-dashed border-border rounded-2xl bg-muted/30">
         <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 mb-4">
            <Settings className="h-7 w-7 text-primary" />
         </div>
-        <h3 className="text-xl font-semibold tracking-tight text-foreground mb-1">No services created</h3>
+        <h3 className="text-xl font-semibold tracking-tight text-foreground mb-1">{t('services.no_services')}</h3>
         <p className="text-sm text-muted-foreground mb-6 max-w-sm">
-          You don't have any services yet. Create your first service to start accepting bookings.
+          {t('services.empty_description')}
         </p>
         <Button asChild>
           <Link to="/services/new">
-            <Plus className="mr-2 h-4 w-4" /> Add New Service
+            <Plus className="mr-2 h-4 w-4" /> {t('services.add_new')}
           </Link>
         </Button>
       </div>
@@ -68,15 +71,15 @@ export const ServicesTable = ({ services, isLoading }: ServicesTableProps) => {
   }
 
   return (
-    <div className="border border-slate-200/60 dark:border-slate-800 rounded-xl bg-card shadow-sm overflow-hidden">
+    <div className="border border-border/50 rounded-xl bg-card shadow-sm overflow-hidden">
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>ID</TableHead>
-            <TableHead>Service Name</TableHead>
-            <TableHead>Duration (mins)</TableHead>
-            <TableHead>Price (EGP)</TableHead>
-            <TableHead className="w-16">Actions</TableHead>
+            <TableHead>{t('services.id_header')}</TableHead>
+            <TableHead>{t('services.name_header')}</TableHead>
+            <TableHead>{t('services.duration_header')}</TableHead>
+            <TableHead>{t('services.price_header')}</TableHead>
+            <TableHead className="w-16">{t('services.actions_header')}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -86,8 +89,8 @@ export const ServicesTable = ({ services, isLoading }: ServicesTableProps) => {
                 {service.id.substring(0, 8)}...
               </TableCell>
               <TableCell className="font-medium">{service.name}</TableCell>
-              <TableCell>{service.duration} mins</TableCell>
-              <TableCell>{service.price} EGP</TableCell>
+              <TableCell>{service.duration} {t('common.mins')}</TableCell>
+              <TableCell>{service.price} {t('common.currency')}</TableCell>
               <TableCell>
                 <AlertDialog>
                   <DropdownMenu>
@@ -99,12 +102,12 @@ export const ServicesTable = ({ services, isLoading }: ServicesTableProps) => {
                     <DropdownMenuContent align="end">
                       <DropdownMenuItem asChild>
                         <Link to={`/services/edit/${service.id}`} className="flex items-center">
-                          <Pencil className="mr-2 h-4 w-4" /> Edit
+                          <Pencil className="mr-2 h-4 w-4 ml-2 mr-2" /> {t('common.edit')}
                         </Link>
                       </DropdownMenuItem>
                       <AlertDialogTrigger asChild>
                         <DropdownMenuItem className="text-destructive focus:bg-destructive/10 focus:text-destructive">
-                          <Trash2 className="mr-2 h-4 w-4" /> Delete
+                          <Trash2 className="mr-2 h-4 w-4 ml-2 mr-2" /> {t('common.delete')}
                         </DropdownMenuItem>
                       </AlertDialogTrigger>
                     </DropdownMenuContent>
@@ -112,18 +115,18 @@ export const ServicesTable = ({ services, isLoading }: ServicesTableProps) => {
 
                   <AlertDialogContent>
                     <AlertDialogHeader>
-                      <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                      <AlertDialogTitle>{t('common.confirm_title')}</AlertDialogTitle>
                       <AlertDialogDescription>
-                        This will permanently delete the service "{service.name}". This action cannot be undone.
+                        {t('services.delete_confirmation', { name: service.name })}
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogCancel>{t('common.cancel')}</AlertDialogCancel>
                       <AlertDialogAction
                         onClick={() => deleteService(service.id)}
                         className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                       >
-                        Delete
+                        {t('common.delete')}
                       </AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>

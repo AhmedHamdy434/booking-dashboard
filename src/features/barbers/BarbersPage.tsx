@@ -31,6 +31,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Plus, MoreVertical, Pencil, Trash2, Scissors } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const BarberRow = memo(({ 
   barber, 
@@ -42,62 +43,67 @@ const BarberRow = memo(({
   onEdit: (barber: Barber) => void;
   onToggleStatus: (id: string, currentStatus: boolean) => void;
   onDelete: (id: string) => void;
-}) => (
-  <TableRow>
-    <TableCell className="font-mono text-xs text-muted-foreground">
-      {barber.id.substring(0, 8)}...
-    </TableCell>
-    <TableCell className="font-medium">{barber.name}</TableCell>
-    <TableCell>
-      <Switch
-        checked={barber.is_active}
-        onCheckedChange={() => onToggleStatus(barber.id, barber.is_active)}
-      />
-    </TableCell>
-    <TableCell>
-      <AlertDialog>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon">
-              <MoreVertical className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => onEdit(barber)}>
-              <Pencil className="mr-2 h-4 w-4" /> Edit
-            </DropdownMenuItem>
-            <AlertDialogTrigger asChild>
-              <DropdownMenuItem className="text-destructive focus:bg-destructive/10 focus:text-destructive">
-                <Trash2 className="mr-2 h-4 w-4" /> Delete
+}) => {
+  const { t } = useTranslation();
+  
+  return (
+    <TableRow>
+      <TableCell className="font-mono text-xs text-muted-foreground">
+        {barber.id.substring(0, 8)}...
+      </TableCell>
+      <TableCell className="font-medium">{barber.name}</TableCell>
+      <TableCell>
+        <Switch
+          checked={barber.is_active}
+          onCheckedChange={() => onToggleStatus(barber.id, barber.is_active)}
+        />
+      </TableCell>
+      <TableCell>
+        <AlertDialog>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <MoreVertical className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => onEdit(barber)}>
+                <Pencil className="mr-2 h-4 w-4 ml-2 mr-2" /> {t('common.edit')}
               </DropdownMenuItem>
-            </AlertDialogTrigger>
-          </DropdownMenuContent>
-        </DropdownMenu>
+              <AlertDialogTrigger asChild>
+                <DropdownMenuItem className="text-destructive focus:bg-destructive/10 focus:text-destructive">
+                  <Trash2 className="mr-2 h-4 w-4 ml-2 mr-2" /> {t('common.delete')}
+                </DropdownMenuItem>
+              </AlertDialogTrigger>
+            </DropdownMenuContent>
+          </DropdownMenu>
 
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This will permanently delete "{barber.name}". This action cannot be undone.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={() => onDelete(barber.id)}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            >
-              Delete
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </TableCell>
-  </TableRow>
-));
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>{t('common.confirm_title')}</AlertDialogTitle>
+              <AlertDialogDescription>
+                {t('barbers.delete_confirmation', { name: barber.name })}
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>{t('common.cancel')}</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={() => onDelete(barber.id)}
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              >
+                {t('common.delete')}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </TableCell>
+    </TableRow>
+  );
+});
 BarberRow.displayName = 'BarberRow';
 
 export const BarbersPage = () => {
+  const { t } = useTranslation();
   const { data: barbers, isLoading } = useBarbers();
   const { mutate: toggleStatus } = useToggleBarberStatus();
   const { mutate: deleteBarber } = useDeleteBarber();
@@ -127,13 +133,13 @@ export const BarbersPage = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Barbers</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('barbers.title')}</h1>
           <p className="text-muted-foreground">
-            Manage your barbers and their active status.
+            {t('barbers.subtitle')}
           </p>
         </div>
         <Button onClick={handleAddBarber}>
-          <Plus className="mr-2 h-4 w-4" /> Add Barber
+          <Plus className="mr-2 h-4 w-4 ml-2 mr-2" /> {t('barbers.add_new')}
         </Button>
       </div>
 
@@ -149,22 +155,22 @@ export const BarbersPage = () => {
             <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 mb-4">
                <Scissors className="h-7 w-7 text-primary" />
             </div>
-            <h3 className="text-xl font-semibold tracking-tight text-foreground mb-1">No barbers found</h3>
+            <h3 className="text-xl font-semibold tracking-tight text-foreground mb-1">{t('barbers.no_barbers')}</h3>
             <p className="text-sm text-muted-foreground mb-6 max-w-sm">
-              Add your first barber to start scheduling appointments.
+              {t('barbers.empty_description')}
             </p>
             <Button onClick={handleAddBarber}>
-              <Plus className="mr-2 h-4 w-4" /> Add Barber
+              <Plus className="mr-2 h-4 w-4 ml-2 mr-2" /> {t('barbers.add_new')}
             </Button>
           </div>
         ) : (
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>ID</TableHead>
-                <TableHead>Name</TableHead>
-                <TableHead>Active</TableHead>
-                <TableHead className="w-16">Actions</TableHead>
+                <TableHead>{t('barbers.id_header')}</TableHead>
+                <TableHead>{t('barbers.name_header')}</TableHead>
+                <TableHead>{t('barbers.active_header')}</TableHead>
+                <TableHead className="w-16">{t('barbers.actions_header')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

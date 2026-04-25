@@ -5,12 +5,26 @@ import { Toaster } from '@/components/ui/sonner';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { Menu } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { supabase } from '@/lib/supabase';
 
 export const AppLayout = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
   const [prevPathname, setPrevPathname] = useState(location.pathname);
+
+  // Trigger the background job on every route change in the dashboard
+  useEffect(() => {
+    const runAutoCompleteJob = async () => {
+      try {
+        await supabase.rpc('auto_update_completed_bookings');
+      } catch (error) {
+        console.error('Error running auto-complete job:', error);
+      }
+    };
+    
+    runAutoCompleteJob();
+  }, []);
 
   // Close mobile menu on route change (Recommended React pattern)
   if (location.pathname !== prevPathname) {

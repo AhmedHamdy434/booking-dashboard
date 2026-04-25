@@ -14,11 +14,14 @@ import {
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { format, parseISO } from "date-fns";
+import { arSA } from "date-fns/locale";
 import { useBookings, useUpdateBookingStatus } from "../hooks/useBookings";
 import { cn } from "@/lib/utils";
 import { useSearchParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export const BookingsList = () => {
+  const { t, i18n } = useTranslation();
   const [searchParams] = useSearchParams();
   const filters = useMemo(
     () => ({
@@ -33,6 +36,8 @@ export const BookingsList = () => {
   const { data: bookings, isLoading } = useBookings(filters);
   const { mutate: updateStatus, isPending } = useUpdateBookingStatus();
   const [updatingId, setUpdatingId] = useState<string | null>(null);
+
+  const dateLocale = i18n.language === "ar" ? arSA : undefined;
 
   if (isLoading) {
     return (
@@ -60,19 +65,18 @@ export const BookingsList = () => {
 
   if (!bookings || bookings.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-24 px-4 text-center border border-dashed border-slate-200 dark:border-slate-800 rounded-2xl bg-slate-50/50 dark:bg-slate-900/20">
+      <div className="flex flex-col items-center justify-center py-24 px-4 text-center border border-dashed border-border rounded-2xl bg-muted/50">
         <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 mb-4">
           <ClipboardList className="h-7 w-7 text-primary" />
         </div>
         <h3 className="text-xl font-semibold tracking-tight text-foreground mb-1">
-          No bookings yet
+          {t("bookings.no_bookings")}
         </h3>
         <p className="text-sm text-muted-foreground mb-6 max-w-sm">
-          You don't have any upcoming bookings. They will appear here once
-          customers start booking your services.
+          {t("bookings.empty_description")}
         </p>
         <Button variant="outline" onClick={() => window.location.reload()}>
-          <RefreshCw className="mr-2 h-4 w-4" /> Refresh Page
+          <RefreshCw className="mr-2 h-4 w-4" /> {t("bookings.refresh")}
         </Button>
       </div>
     );
@@ -87,6 +91,14 @@ export const BookingsList = () => {
     }
   };
 
+  const getStatusLabel = (status: string, past: boolean) => {
+    if (status === "confirmed") return t("bookings.status_confirmed");
+    if (status === "pending") return t("bookings.status_pending");
+    if (status === "cancelled") return t("bookings.status_cancelled");
+    if (status === "completed") return t("bookings.status_completed");
+    return past ? t("bookings.past") : t("bookings.upcoming");
+  };
+
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {bookings.map((booking) => {
@@ -97,8 +109,8 @@ export const BookingsList = () => {
           <Card
             key={booking.id}
             className={cn(
-              "overflow-hidden transition-all hover:shadow-md border-slate-200/60 dark:border-slate-800",
-              past ? "opacity-70 bg-slate-50 dark:bg-slate-900/50" : "bg-card",
+              "overflow-hidden transition-all hover:shadow-md border-border",
+              past ? "opacity-70 bg-muted/30" : "bg-card",
               booking.status === "pending" &&
                 !past &&
                 "ring-1 ring-amber-500/30",
@@ -124,11 +136,11 @@ export const BookingsList = () => {
               <div className="flex justify-between items-start mb-4">
                 <div>
                   <h3 className="font-semibold text-lg line-clamp-1 text-foreground">
-                    {booking.services?.name || "Unknown Service"}
+                    {booking.services?.name || t("bookings.unknown_service")}
                   </h3>
                   <p className="text-sm text-muted-foreground flex items-center mt-1">
-                    <Scissors className="w-3.5 h-3.5 mr-1.5" />
-                    {booking.barbers?.name || "Unknown Barber"}
+                    <Scissors className="w-3.5 h-3.5 mr-1.5 ml-1.5" />
+                    {booking.barbers?.name || t("bookings.unknown_barber")}
                   </p>
                 </div>
                 <div className="flex flex-col items-end gap-2">
@@ -136,41 +148,44 @@ export const BookingsList = () => {
                     className={cn(
                       "inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ring-1 ring-inset",
                       booking.status === "confirmed"
-                        ? "bg-emerald-50 text-emerald-700 ring-emerald-600/20"
+                        ? "bg-emerald-50 text-emerald-700 ring-emerald-600/20 dark:bg-emerald-500/20 dark:text-emerald-400 dark:ring-emerald-400/20"
                         : booking.status === "pending"
-                          ? "bg-amber-50 text-amber-700 ring-amber-600/20 animate-pulse"
+                          ? "bg-amber-50 text-amber-700 ring-amber-600/20 animate-pulse dark:bg-amber-500/20 dark:text-amber-400 dark:ring-amber-400/20"
                           : booking.status === "cancelled"
-                            ? "bg-red-50 text-red-700 ring-red-600/20"
+                            ? "bg-red-50 text-red-700 ring-red-600/20 dark:bg-red-500/20 dark:text-red-400 dark:ring-red-400/20"
                             : booking.status === "completed"
-                              ? "bg-blue-50 text-blue-700 ring-blue-600/20"
+                              ? "bg-blue-50 text-blue-700 ring-blue-600/20 dark:bg-blue-500/20 dark:text-blue-400 dark:ring-blue-400/20"
                               : past
-                                ? "bg-slate-100 text-slate-700 ring-slate-600/20 dark:bg-slate-800 dark:text-slate-400"
+                                ? "bg-muted text-muted-foreground ring-border"
                                 : "bg-primary/10 text-primary ring-primary/20",
                     )}
                   >
-                    {booking.status || (past ? "Past" : "Upcoming")}
+                    {getStatusLabel(booking.status, past)}
                   </span>
                 </div>
               </div>
 
-              <div className="space-y-2.5 mt-5 pt-4 border-t border-slate-100 dark:border-slate-800">
+              <div className="space-y-2.5 mt-5 pt-4 border-t border-border">
                 <div className="flex items-center text-sm">
-                  <Calendar className="w-4 h-4 mr-3 text-muted-foreground" />
+                  <Calendar className="w-4 h-4 mr-3 ml-3 text-muted-foreground" />
                   <span className="font-medium text-foreground">
-                    {format(parseISO(booking.date), "EEEE, MMM do, yyyy")}
+                    {format(parseISO(booking.date), "EEEE, MMM do, yyyy", {
+                      locale: dateLocale,
+                    })}
                   </span>
                 </div>
                 <div className="flex items-center text-sm">
-                  <Clock className="w-4 h-4 mr-3 text-muted-foreground" />
+                  <Clock className="w-4 h-4 mr-3 ml-3 text-muted-foreground" />
                   <span className="font-medium text-foreground">
                     {booking.time}
                   </span>
                 </div>
 
-                <div className="flex items-center text-xs text-muted-foreground mt-3 pt-3 border-t border-slate-100 dark:border-slate-800">
-                  <User className="w-3.5 h-3.5 mr-2" />
+                <div className="flex items-center text-xs text-muted-foreground mt-3 pt-3 border-t border-border">
+                  <User className="w-3.5 h-3.5 mr-2 ml-2" />
                   <span className="font-mono truncate" title={booking.user_id}>
-                    UID: {booking.user_id.substring(0, 8)}...
+                    {t("bookings.user_id_label")}:{" "}
+                    {booking.user_id.substring(0, 8)}...
                   </span>
                 </div>
               </div>
@@ -190,7 +205,8 @@ export const BookingsList = () => {
                       <Loader2 className="h-4 w-4 animate-spin" />
                     ) : (
                       <>
-                        <Check className="w-4 h-4 mr-1.5" /> Accept
+                        <Check className="w-4 h-4 mr-1.5 ml-1.5" />{" "}
+                        {t("bookings.accept")}
                       </>
                     )}
                   </Button>
@@ -208,7 +224,8 @@ export const BookingsList = () => {
                       <Loader2 className="h-4 w-4 animate-spin" />
                     ) : (
                       <>
-                        <X className="w-4 h-4 mr-1.5" /> Reject
+                        <X className="w-4 h-4 mr-1.5 ml-1.5" />{" "}
+                        {t("bookings.reject")}
                       </>
                     )}
                   </Button>

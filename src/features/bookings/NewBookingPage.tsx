@@ -2,8 +2,10 @@ import { BookingWizard } from './components/BookingWizard';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export const NewBookingPage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   return (
@@ -11,13 +13,13 @@ export const NewBookingPage = () => {
       <div className="flex items-center gap-4 mb-8">
         <Button variant="outline" size="icon" asChild>
           <Link to="/bookings">
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="h-4 w-4 rtl:rotate-180" />
           </Link>
         </Button>
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">New Booking</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('wizard.new_booking')}</h1>
           <p className="text-muted-foreground">
-            Schedule a new appointment by selecting a service, barber, and time.
+            {t('wizard.wizard_desc')}
           </p>
         </div>
       </div>

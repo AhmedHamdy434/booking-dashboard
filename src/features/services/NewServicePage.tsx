@@ -13,8 +13,10 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export const NewServicePage = () => {
+  const { t } = useTranslation();
   const { mutate: createService, isPending } = useCreateService();
 
   const form = useForm<ServiceFormValues>({
@@ -35,24 +37,24 @@ export const NewServicePage = () => {
       <div className="flex items-center gap-4">
         <Button variant="outline" size="icon" asChild>
           <Link to="/services">
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="h-4 w-4 rtl:rotate-180" />
           </Link>
         </Button>
-        <h1 className="text-3xl font-bold tracking-tight">Add New Service</h1>
+        <h1 className="text-3xl font-bold tracking-tight">{t('services.add_title')}</h1>
       </div>
 
       <Card className="max-w-2xl">
         <CardHeader>
-          <CardTitle>Service Details</CardTitle>
+          <CardTitle>{t('services.details')}</CardTitle>
         </CardHeader>
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <FormItem>
-                <FormLabel error={!!form.formState.errors.name}>Service Name</FormLabel>
+                <FormLabel error={!!form.formState.errors.name}>{t('services.name_label')}</FormLabel>
                 <FormControl>
                   <Input 
-                    placeholder="e.g. Haircut, Dental Checkup" 
+                    placeholder={t('services.name_placeholder')} 
                     {...form.register('name')} 
                   />
                 </FormControl>
@@ -60,7 +62,7 @@ export const NewServicePage = () => {
               </FormItem>
 
               <FormItem>
-                <FormLabel error={!!form.formState.errors.duration}>Duration (minutes)</FormLabel>
+                <FormLabel error={!!form.formState.errors.duration}>{t('services.duration_label')}</FormLabel>
                 <FormControl>
                   <Input 
                     type="number" 
@@ -71,7 +73,7 @@ export const NewServicePage = () => {
               </FormItem>
 
               <FormItem>
-                <FormLabel error={!!form.formState.errors.price}>Price (EGP)</FormLabel>
+                <FormLabel error={!!form.formState.errors.price}>{t('services.price_label')}</FormLabel>
                 <FormControl>
                   <Input 
                     type="number" 
@@ -83,10 +85,10 @@ export const NewServicePage = () => {
 
               <div className="flex justify-end gap-4">
                 <Button variant="outline" asChild>
-                  <Link to="/services">Cancel</Link>
+                  <Link to="/services">{t('common.cancel')}</Link>
                 </Button>
                 <Button type="submit" disabled={isPending}>
-                  {isPending ? 'Creating...' : 'Create Service'}
+                  {isPending ? t('services.creating') : t('services.create')}
                 </Button>
               </div>
             </form>
