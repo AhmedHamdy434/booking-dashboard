@@ -32,6 +32,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Plus, MoreVertical, Pencil, Trash2, Scissors } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 const BarberRow = memo(({ 
   barber, 
@@ -51,7 +52,20 @@ const BarberRow = memo(({
       <TableCell className="font-mono text-xs text-muted-foreground">
         {barber.id.substring(0, 8)}...
       </TableCell>
-      <TableCell className="font-medium">{barber.name}</TableCell>
+      <TableCell>
+        <div className="flex items-center gap-3">
+          <Avatar className="h-9 w-9 border border-border">
+            <AvatarImage src={barber.image_url} alt={barber.name} />
+            <AvatarFallback className="bg-primary/10 text-primary font-bold">
+              {barber.name.charAt(0)}
+            </AvatarFallback>
+          </Avatar>
+          <span className="font-medium">{barber.name}</span>
+        </div>
+      </TableCell>
+      <TableCell className="text-muted-foreground text-sm max-w-[250px] truncate">
+        {barber.bio || '-'}
+      </TableCell>
       <TableCell>
         <Switch
           checked={barber.is_active}
@@ -169,6 +183,7 @@ export const BarbersPage = () => {
               <TableRow>
                 <TableHead>{t('barbers.id_header')}</TableHead>
                 <TableHead>{t('barbers.name_header')}</TableHead>
+                <TableHead>{t('barbers.bio_label')}</TableHead>
                 <TableHead>{t('barbers.active_header')}</TableHead>
                 <TableHead className="w-16">{t('barbers.actions_header')}</TableHead>
               </TableRow>

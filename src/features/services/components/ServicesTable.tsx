@@ -77,6 +77,7 @@ export const ServicesTable = ({ services, isLoading }: ServicesTableProps) => {
           <TableRow>
             <TableHead>{t('services.id_header')}</TableHead>
             <TableHead>{t('services.name_header')}</TableHead>
+            <TableHead>{t('services.description_label')}</TableHead>
             <TableHead>{t('services.duration_header')}</TableHead>
             <TableHead>{t('services.price_header')}</TableHead>
             <TableHead className="w-16">{t('services.actions_header')}</TableHead>
@@ -89,6 +90,9 @@ export const ServicesTable = ({ services, isLoading }: ServicesTableProps) => {
                 {service.id.substring(0, 8)}...
               </TableCell>
               <TableCell className="font-medium">{service.name}</TableCell>
+              <TableCell className="text-muted-foreground text-sm max-w-[200px] truncate">
+                {service.description || '-'}
+              </TableCell>
               <TableCell>{service.duration} {t('common.mins')}</TableCell>
               <TableCell>{service.price} {t('common.currency')}</TableCell>
               <TableCell>

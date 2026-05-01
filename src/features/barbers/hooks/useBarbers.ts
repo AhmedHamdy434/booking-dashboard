@@ -3,10 +3,12 @@ import { barbersApi } from '../api/barbersApi';
 import { z } from 'zod';
 import { toast } from 'sonner';
 import { queryClient } from '@/lib/queryClient';
-import type { Barber, BarberAvailability } from '@/types/barber';
+import type { Barber } from '@/types/barber';
 
 export const barberSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
+  bio: z.string().optional(),
+  image_url: z.string().url('Invalid URL').optional().or(z.literal('')),
   is_active: z.boolean(),
 });
 

@@ -2,19 +2,13 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { serviceSchema, type ServiceFormValues, useService, useUpdateService } from './hooks/useServices';
 import { Button } from '@/components/ui/button';
-import {
-  Form,
-  FormControl,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+import { Form } from '@/components/ui/form';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { FormInput, FormTextarea } from '@/components/shared/FormFields';
 
 export const EditServicePage = () => {
   const { t } = useTranslation();
@@ -27,6 +21,7 @@ export const EditServicePage = () => {
     resolver: zodResolver(serviceSchema),
     defaultValues: {
       name: '',
+      description: '',
       duration: 30,
       price: 0,
     },
@@ -36,6 +31,7 @@ export const EditServicePage = () => {
     if (service) {
       form.reset({
         name: service.name,
+        description: service.description || '',
         duration: service.duration,
         price: service.price || 0,
       });
@@ -76,38 +72,35 @@ export const EditServicePage = () => {
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <FormItem>
-                <FormLabel error={!!form.formState.errors.name}>{t('services.name_label')}</FormLabel>
-                <FormControl>
-                  <Input 
-                    placeholder={t('services.name_placeholder')} 
-                    {...form.register('name')} 
-                  />
-                </FormControl>
-                <FormMessage>{form.formState.errors.name?.message}</FormMessage>
-              </FormItem>
+              <FormInput
+                label={t('services.name_label')}
+                placeholder={t('services.name_placeholder')}
+                error={form.formState.errors.name}
+                {...form.register('name')}
+              />
 
-              <FormItem>
-                <FormLabel error={!!form.formState.errors.duration}>{t('services.duration_label')}</FormLabel>
-                <FormControl>
-                  <Input 
-                    type="number" 
-                    {...form.register('duration', { valueAsNumber: true })} 
-                  />
-                </FormControl>
-                <FormMessage>{form.formState.errors.duration?.message}</FormMessage>
-              </FormItem>
+              <FormTextarea
+                label={t('services.description_label')}
+                placeholder={t('services.description_placeholder')}
+                error={form.formState.errors.description}
+                {...form.register('description')}
+                className="resize-none"
+                rows={4}
+              />
 
-              <FormItem>
-                <FormLabel error={!!form.formState.errors.price}>{t('services.price_label')}</FormLabel>
-                <FormControl>
-                  <Input 
-                    type="number" 
-                    {...form.register('price', { valueAsNumber: true })} 
-                  />
-                </FormControl>
-                <FormMessage>{form.formState.errors.price?.message}</FormMessage>
-              </FormItem>
+              <FormInput
+                label={t('services.duration_label')}
+                type="number"
+                error={form.formState.errors.duration}
+                {...form.register('duration', { valueAsNumber: true })}
+              />
+
+              <FormInput
+                label={t('services.price_label')}
+                type="number"
+                error={form.formState.errors.price}
+                {...form.register('price', { valueAsNumber: true })}
+              />
 
               <div className="flex justify-end gap-4 pt-4">
                 <Button variant="outline" asChild disabled={isUpdating}>

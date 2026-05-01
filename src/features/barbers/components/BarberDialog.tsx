@@ -9,18 +9,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+import { Form, FormField, FormItem, FormLabel, FormControl } from '@/components/ui/form';
 import { Switch } from '@/components/ui/switch';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { FormInput, FormTextarea } from '@/components/shared/FormFields';
 
 interface BarberDialogProps {
   open: boolean;
@@ -40,6 +33,8 @@ export const BarberDialog = ({ open, onOpenChange, barber }: BarberDialogProps) 
     resolver: zodResolver(barberSchema),
     defaultValues: {
       name: '',
+      bio: '',
+      image_url: '',
       is_active: true,
     },
   });
@@ -48,11 +43,15 @@ export const BarberDialog = ({ open, onOpenChange, barber }: BarberDialogProps) 
     if (barber && open) {
       form.reset({
         name: barber.name,
+        bio: barber.bio || '',
+        image_url: barber.image_url || '',
         is_active: barber.is_active,
       });
     } else if (!open) {
       form.reset({
         name: '',
+        bio: '',
+        image_url: '',
         is_active: true,
       });
     }
@@ -71,25 +70,35 @@ export const BarberDialog = ({ open, onOpenChange, barber }: BarberDialogProps) 
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>{isEditing ? t('barbers.edit_barber') : t('barbers.add_barber')}</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t('barbers.name_label')}</FormLabel>
-                  <FormControl>
-                    <Input placeholder={t('barbers.name_placeholder')} {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+            <FormInput
+              label={t('barbers.name_label')}
+              placeholder={t('barbers.name_placeholder')}
+              error={form.formState.errors.name}
+              {...form.register('name')}
             />
+
+            <FormTextarea
+              label={t('barbers.bio_label')}
+              placeholder={t('barbers.bio_placeholder')}
+              error={form.formState.errors.bio}
+              {...form.register('bio')}
+              className="resize-none"
+              rows={3}
+            />
+
+            <FormInput
+              label={t('barbers.image_url_label')}
+              placeholder={t('barbers.image_url_placeholder')}
+              error={form.formState.errors.image_url}
+              {...form.register('image_url')}
+            />
+
             <FormField
               control={form.control}
               name="is_active"
