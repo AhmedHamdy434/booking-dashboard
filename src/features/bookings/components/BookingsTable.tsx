@@ -10,6 +10,7 @@ import type { Booking } from '@/types/booking';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { ClipboardList, RefreshCw } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface BookingsTableProps {
   bookings: Booking[] | undefined;
@@ -17,6 +18,8 @@ interface BookingsTableProps {
 }
 
 export const BookingsTable = ({ bookings, isLoading }: BookingsTableProps) => {
+  const { t } = useTranslation();
+
   if (isLoading) {
     return (
       <div className="space-y-2">
@@ -34,28 +37,29 @@ export const BookingsTable = ({ bookings, isLoading }: BookingsTableProps) => {
         <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 mb-4">
            <ClipboardList className="h-7 w-7 text-primary" />
         </div>
-        <h3 className="text-xl font-semibold tracking-tight text-foreground mb-1">No bookings yet</h3>
+        <h3 className="text-xl font-semibold tracking-tight text-foreground mb-1">{t('bookings.empty_title')}</h3>
         <p className="text-sm text-muted-foreground mb-6 max-w-sm">
-          You don't have any upcoming bookings. They will appear here once customers start booking your services.
+          {t('bookings.empty_desc')}
         </p>
         <Button variant="outline" onClick={() => window.location.reload()}>
-          <RefreshCw className="mr-2 h-4 w-4" /> Refresh Page
+          <RefreshCw className="me-2 h-4 w-4" /> {t('bookings.refresh')}
         </Button>
       </div>
     );
   }
+
 
   return (
     <div className="border border-slate-200/60 dark:border-slate-800 rounded-xl bg-card shadow-sm overflow-hidden">
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Booking ID</TableHead>
-            <TableHead>User ID</TableHead>
-            <TableHead>Service</TableHead>
-            <TableHead>Barber</TableHead>
-            <TableHead>Date</TableHead>
-            <TableHead>Time</TableHead>
+            <TableHead>{t('bookings.id')}</TableHead>
+            <TableHead>{t('bookings.user')}</TableHead>
+            <TableHead>{t('bookings.service')}</TableHead>
+            <TableHead>{t('bookings.barber')}</TableHead>
+            <TableHead>{t('bookings.date')}</TableHead>
+            <TableHead>{t('bookings.time')}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>

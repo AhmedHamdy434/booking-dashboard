@@ -26,6 +26,7 @@ export const AppLayout = () => {
     runAutoCompleteJob();
   }, []);
 
+
   // Close mobile menu on route change (Recommended React pattern)
   if (location.pathname !== prevPathname) {
     setPrevPathname(location.pathname);
@@ -53,12 +54,14 @@ export const AppLayout = () => {
               <Menu className="h-6 w-6" />
               <span className="sr-only">Open sidebar</span>
             </Button>
-            <SheetContent side="left" className="w-72 p-0">
+            <SheetContent side="start" className="w-72 p-0">
                <div className="flex flex-col h-full bg-card">
                  <Sidebar />
                </div>
             </SheetContent>
+
           </Sheet>
+
 
           <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6 items-center justify-between">
             <Navbar />

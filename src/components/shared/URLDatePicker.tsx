@@ -53,11 +53,12 @@ export function URLDatePicker({ label, paramKey, placeholder = "Pick a date" }: 
             <Button
               variant={"outline"}
               className={cn(
-                "w-full justify-start text-left font-normal bg-background/50",
+                "w-full justify-start text-start font-normal bg-background/50",
                 !date && "text-muted-foreground"
               )}
             >
-              <CalendarIcon className="mr-2 h-4 w-4" />
+              <CalendarIcon className="me-2 h-4 w-4" />
+
               {date ? format(date, "PPP") : <span>{placeholder}</span>}
             </Button>
           </PopoverTrigger>

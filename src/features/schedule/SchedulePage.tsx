@@ -1,37 +1,9 @@
-import FullCalendar from '@fullcalendar/react';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import timeGridPlugin from '@fullcalendar/timegrid';
-import interactionPlugin from '@fullcalendar/interaction';
-import { useBookings } from '@/features/bookings/hooks/useBookings';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Loader2, Calendar as CalendarIcon } from 'lucide-react';
+import { Calendar as CalendarIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import arLocale from '@fullcalendar/core/locales/ar';
+import { ScheduleCalendar } from './components/ScheduleCalendar';
 
 export const SchedulePage = () => {
-  const { t, i18n } = useTranslation();
-  const { data: bookings, isLoading } = useBookings();
-
-  // Transform bookings to FullCalendar events
-  const events = bookings?.map((booking) => ({
-    id: booking.id,
-    title: booking.services?.name || t('bookings.unknown_service'),
-    start: `${booking.date}T${booking.time}`,
-    // Assuming duration is 30 mins if not specified, or we could fetch it
-    extendedProps: {
-      userId: booking.user_id,
-    },
-  })) || [];
-
-  if (isLoading) {
-    return (
-      <div className="flex h-[60vh] items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
-  }
-
-  const isRtl = i18n.language === 'ar';
+  const { t } = useTranslation();
 
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -45,98 +17,7 @@ export const SchedulePage = () => {
         </p>
       </div>
 
-      <Card className="border-slate-200/60 dark:border-slate-800 shadow-sm overflow-hidden">
-        <CardHeader className="bg-slate-50/50 dark:bg-slate-900/50 border-b border-slate-200/60 dark:border-slate-800">
-          <CardTitle>{t('schedule.calendar_view')}</CardTitle>
-        </CardHeader>
-        <CardContent className="p-0 sm:p-6">
-          <div className="calendar-container" dir={isRtl ? 'rtl' : 'ltr'}>
-            <FullCalendar
-              plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-              initialView="dayGridMonth"
-              locale={i18n.language === 'ar' ? arLocale : 'en'}
-              direction={isRtl ? 'rtl' : 'ltr'}
-              headerToolbar={{
-                left: isRtl ? 'dayGridMonth,timeGridWeek,timeGridDay' : 'prev,next today',
-                center: 'title',
-                right: isRtl ? 'prev,next today' : 'dayGridMonth,timeGridWeek,timeGridDay',
-              }}
-              events={events}
-              height="auto"
-              aspectRatio={1.5}
-              eventColor="#7c3aed"
-              eventTextColor="#ffffff"
-              dayMaxEvents={true}
-              nowIndicator={true}
-              slotMinTime="08:00:00"
-              slotMaxTime="20:00:00"
-            />
-          </div>
-        </CardContent>
-      </Card>
-
-      <style>{`
-        .fc {
-          --fc-button-bg-color: transparent;
-          --fc-button-border-color: #e2e8f0;
-          --fc-button-text-color: #64748b;
-          --fc-button-hover-bg-color: #f1f5f9;
-          --fc-button-hover-border-color: #e2e8f0;
-          --fc-button-active-bg-color: #7c3aed;
-          --fc-button-active-border-color: #7c3aed;
-          --fc-button-active-text-color: #ffffff;
-          --fc-border-color: #e2e8f0;
-          --fc-event-bg-color: #7c3aed;
-          --fc-event-border-color: #7c3aed;
-          font-family: inherit;
-        }
-        .dark .fc {
-          --fc-button-border-color: #1e293b;
-          --fc-button-text-color: #94a3b8;
-          --fc-button-hover-bg-color: #1e293b;
-          --fc-button-hover-border-color: #1e293b;
-          --fc-border-color: #1e293b;
-        }
-        .fc .fc-button-primary:not(:disabled).fc-button-active, 
-        .fc .fc-button-primary:not(:disabled):active {
-          background-color: var(--fc-button-active-bg-color);
-          border-color: var(--fc-button-active-border-color);
-          color: var(--fc-button-active-text-color);
-        }
-        .fc-theme-standard td, .fc-theme-standard th {
-          border: 1px solid var(--fc-border-color);
-        }
-        .fc .fc-toolbar-title {
-          font-size: 1.25rem;
-          font-weight: 700;
-          color: var(--foreground);
-        }
-        .fc .fc-col-header-cell-cushion {
-          font-weight: 600;
-          font-size: 0.875rem;
-          color: var(--muted-foreground);
-          padding: 8px 0;
-        }
-        .fc-daygrid-day-number {
-          font-size: 0.875rem;
-          padding: 8px !important;
-          color: var(--muted-foreground);
-        }
-        /* RTL Fixes for FullCalendar buttons */
-        [dir="rtl"] .fc .fc-button-group > .fc-button:not(:last-child) {
-          border-top-left-radius: 0;
-          border-bottom-left-radius: 0;
-          border-top-right-radius: 0.375rem;
-          border-bottom-right-radius: 0.375rem;
-          margin-left: -1px;
-        }
-        [dir="rtl"] .fc .fc-button-group > .fc-button:not(:first-child) {
-          border-top-right-radius: 0;
-          border-bottom-right-radius: 0;
-          border-top-left-radius: 0.375rem;
-          border-bottom-left-radius: 0.375rem;
-        }
-      `}</style>
+      <ScheduleCalendar />
     </div>
   );
 };

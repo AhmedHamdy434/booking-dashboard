@@ -6,12 +6,10 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import type { Service } from '@/types/service';
-import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { Settings, Plus, MoreVertical, Pencil, Trash2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useDeleteService } from '../hooks/useServices';
+import { useServices, useDeleteService } from '../hooks/useServices';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,25 +28,15 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { useTranslation } from 'react-i18next';
+import { ServicesTableSkeleton } from './ServicesTableSkeleton';
 
-interface ServicesTableProps {
-  services: Service[] | undefined;
-  isLoading: boolean;
-}
-
-export const ServicesTable = ({ services, isLoading }: ServicesTableProps) => {
+export const ServicesTable = () => {
   const { t } = useTranslation();
+  const { data: services, isLoading } = useServices();
   const { mutate: deleteService } = useDeleteService();
 
   if (isLoading) {
-    return (
-      <div className="space-y-2">
-        <Skeleton className="h-10 w-full" />
-        <Skeleton className="h-8 w-full" />
-        <Skeleton className="h-8 w-full" />
-        <Skeleton className="h-8 w-full" />
-      </div>
-    );
+    return <ServicesTableSkeleton />;
   }
 
   if (!services || services.length === 0) {
@@ -63,7 +51,7 @@ export const ServicesTable = ({ services, isLoading }: ServicesTableProps) => {
         </p>
         <Button asChild>
           <Link to="/services/new">
-            <Plus className="mr-2 h-4 w-4" /> {t('services.add_new')}
+            <Plus className="me-2 h-4 w-4" /> {t('services.add_new')}
           </Link>
         </Button>
       </div>
@@ -106,12 +94,12 @@ export const ServicesTable = ({ services, isLoading }: ServicesTableProps) => {
                     <DropdownMenuContent align="end">
                       <DropdownMenuItem asChild>
                         <Link to={`/services/edit/${service.id}`} className="flex items-center">
-                          <Pencil className="mr-2 h-4 w-4 ml-2 mr-2" /> {t('common.edit')}
+                          <Pencil className="me-2 h-4 w-4" /> {t('common.edit')}
                         </Link>
                       </DropdownMenuItem>
                       <AlertDialogTrigger asChild>
                         <DropdownMenuItem className="text-destructive focus:bg-destructive/10 focus:text-destructive">
-                          <Trash2 className="mr-2 h-4 w-4 ml-2 mr-2" /> {t('common.delete')}
+                          <Trash2 className="me-2 h-4 w-4" /> {t('common.delete')}
                         </DropdownMenuItem>
                       </AlertDialogTrigger>
                     </DropdownMenuContent>

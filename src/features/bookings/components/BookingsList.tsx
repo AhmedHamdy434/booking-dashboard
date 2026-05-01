@@ -1,5 +1,4 @@
 import { useMemo, useState } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import {
   ClipboardList,
@@ -19,6 +18,7 @@ import { useBookings, useUpdateBookingStatus } from "../hooks/useBookings";
 import { cn } from "@/lib/utils";
 import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { BookingsListSkeleton } from "./BookingsListSkeleton";
 
 export const BookingsList = () => {
   const { t, i18n } = useTranslation();
@@ -40,27 +40,7 @@ export const BookingsList = () => {
   const dateLocale = i18n.language === "ar" ? arSA : undefined;
 
   if (isLoading) {
-    return (
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {[1, 2, 3, 4, 5, 6].map((i) => (
-          <Card key={i} className="overflow-hidden">
-            <CardContent className="p-0">
-              <Skeleton className="h-2 w-full rounded-none" />
-              <div className="p-5 space-y-4">
-                <div className="flex justify-between items-start">
-                  <Skeleton className="h-5 w-3/4" />
-                  <Skeleton className="h-6 w-16 rounded-full" />
-                </div>
-                <div className="space-y-2">
-                  <Skeleton className="h-4 w-full" />
-                  <Skeleton className="h-4 w-4/5" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-    );
+    return <BookingsListSkeleton />;
   }
 
   if (!bookings || bookings.length === 0) {
@@ -76,7 +56,7 @@ export const BookingsList = () => {
           {t("bookings.empty_description")}
         </p>
         <Button variant="outline" onClick={() => window.location.reload()}>
-          <RefreshCw className="mr-2 h-4 w-4" /> {t("bookings.refresh")}
+          <RefreshCw className="me-2 h-4 w-4" /> {t("bookings.refresh")}
         </Button>
       </div>
     );
@@ -139,7 +119,7 @@ export const BookingsList = () => {
                     {booking.services?.name || t("bookings.unknown_service")}
                   </h3>
                   <p className="text-sm text-muted-foreground flex items-center mt-1">
-                    <Scissors className="w-3.5 h-3.5 mr-1.5 ml-1.5" />
+                    <Scissors className="w-3.5 h-3.5 ms-1.5 me-1.5" />
                     {booking.barbers?.name || t("bookings.unknown_barber")}
                   </p>
                 </div>
@@ -167,7 +147,7 @@ export const BookingsList = () => {
 
               <div className="space-y-2.5 mt-5 pt-4 border-t border-border">
                 <div className="flex items-center text-sm">
-                  <Calendar className="w-4 h-4 mr-3 ml-3 text-muted-foreground" />
+                  <Calendar className="w-4 h-4 ms-3 me-3 text-muted-foreground" />
                   <span className="font-medium text-foreground">
                     {format(parseISO(booking.date), "EEEE, MMM do, yyyy", {
                       locale: dateLocale,
@@ -175,14 +155,14 @@ export const BookingsList = () => {
                   </span>
                 </div>
                 <div className="flex items-center text-sm">
-                  <Clock className="w-4 h-4 mr-3 ml-3 text-muted-foreground" />
+                  <Clock className="w-4 h-4 ms-3 me-3 text-muted-foreground" />
                   <span className="font-medium text-foreground">
                     {booking.time}
                   </span>
                 </div>
 
                 <div className="flex items-center text-xs text-muted-foreground mt-3 pt-3 border-t border-border">
-                  <User className="w-3.5 h-3.5 mr-2 ml-2" />
+                  <User className="w-3.5 h-3.5 ms-2 me-2" />
                   <span className="font-mono truncate" title={booking.user_id}>
                     {t("bookings.user_id_label")}:{" "}
                     {booking.user_id.substring(0, 8)}...
@@ -205,7 +185,7 @@ export const BookingsList = () => {
                       <Loader2 className="h-4 w-4 animate-spin" />
                     ) : (
                       <>
-                        <Check className="w-4 h-4 mr-1.5 ml-1.5" />{" "}
+                        <Check className="w-4 h-4 ms-1.5 me-1.5" />{" "}
                         {t("bookings.accept")}
                       </>
                     )}
@@ -224,7 +204,7 @@ export const BookingsList = () => {
                       <Loader2 className="h-4 w-4 animate-spin" />
                     ) : (
                       <>
-                        <X className="w-4 h-4 mr-1.5 ml-1.5" />{" "}
+                        <X className="w-4 h-4 ms-1.5 me-1.5" />{" "}
                         {t("bookings.reject")}
                       </>
                     )}

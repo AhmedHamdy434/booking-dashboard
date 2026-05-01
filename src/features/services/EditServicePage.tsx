@@ -1,42 +1,17 @@
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { serviceSchema, type ServiceFormValues, useService, useUpdateService } from './hooks/useServices';
+import { useService, useUpdateService, type ServiceFormValues } from './hooks/useServices';
 import { Button } from '@/components/ui/button';
-import { Form } from '@/components/ui/form';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowLeft, Loader2 } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FormInput, FormTextarea } from '@/components/shared/FormFields';
+import { ServiceForm } from './components/ServiceForm';
+import { ServiceFormSkeleton } from './components/ServiceFormSkeleton';
 
 export const EditServicePage = () => {
   const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { data: service, isLoading: isLoadingService } = useService(id);
+  const { data: service, isLoading } = useService(id);
   const { mutate: updateService, isPending: isUpdating } = useUpdateService();
-
-  const form = useForm<ServiceFormValues>({
-    resolver: zodResolver(serviceSchema),
-    defaultValues: {
-      name: '',
-      description: '',
-      duration: 30,
-      price: 0,
-    },
-  });
-
-  useEffect(() => {
-    if (service) {
-      form.reset({
-        name: service.name,
-        description: service.description || '',
-        duration: service.duration,
-        price: service.price || 0,
-      });
-    }
-  }, [service, form]);
 
   const onSubmit = (data: ServiceFormValues) => {
     if (id) {
@@ -46,12 +21,8 @@ export const EditServicePage = () => {
     }
   };
 
-  if (isLoadingService) {
-    return (
-      <div className="flex items-center justify-center h-[50vh]">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
+  if (isLoading) {
+    return <ServiceFormSkeleton />;
   }
 
   return (
@@ -65,55 +36,17 @@ export const EditServicePage = () => {
         <h1 className="text-3xl font-bold tracking-tight text-foreground">{t('services.edit_title')}</h1>
       </div>
 
-      <Card className="max-w-2xl border-slate-200/60 dark:border-slate-800 shadow-sm">
-        <CardHeader>
-          <CardTitle>{t('services.details')}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <FormInput
-                label={t('services.name_label')}
-                placeholder={t('services.name_placeholder')}
-                error={form.formState.errors.name}
-                {...form.register('name')}
-              />
-
-              <FormTextarea
-                label={t('services.description_label')}
-                placeholder={t('services.description_placeholder')}
-                error={form.formState.errors.description}
-                {...form.register('description')}
-                className="resize-none"
-                rows={4}
-              />
-
-              <FormInput
-                label={t('services.duration_label')}
-                type="number"
-                error={form.formState.errors.duration}
-                {...form.register('duration', { valueAsNumber: true })}
-              />
-
-              <FormInput
-                label={t('services.price_label')}
-                type="number"
-                error={form.formState.errors.price}
-                {...form.register('price', { valueAsNumber: true })}
-              />
-
-              <div className="flex justify-end gap-4 pt-4">
-                <Button variant="outline" asChild disabled={isUpdating}>
-                  <Link to="/services">{t('common.cancel')}</Link>
-                </Button>
-                <Button type="submit" disabled={isUpdating}>
-                  {isUpdating ? t('services.saving_changes') : t('services.save_changes')}
-                </Button>
-              </div>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
+      <ServiceForm
+        initialValues={service ? {
+          name: service.name,
+          description: service.description || '',
+          duration: service.duration,
+          price: service.price || 0,
+        } : undefined}
+        onSubmit={onSubmit}
+        isPending={isUpdating}
+        title={t('services.details')}
+      />
     </div>
   );
 };

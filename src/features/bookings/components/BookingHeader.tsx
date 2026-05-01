@@ -16,9 +16,10 @@ const BookingHeader = () => {
         </div>
         <Button asChild>
           <Link to="/bookings/new">
-            <Plus className="mr-2 h-4 w-4" /> {t('common.new_booking')}
+            <Plus className="me-2 h-4 w-4" /> {t('common.new_booking')}
           </Link>
         </Button>
+
       </div>
     );
 };

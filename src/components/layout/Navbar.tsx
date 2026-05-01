@@ -104,7 +104,7 @@ export const Navbar = () => {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <User className="mr-2 h-4 w-4 ml-2 mr-2 text-muted-foreground" />
+              <User className="me-2 h-4 w-4" />
               <span>{t('navbar.profile')}</span>
             </DropdownMenuItem>
             <ConfirmDialog
@@ -112,14 +112,16 @@ export const Navbar = () => {
               description={t('navbar.logout_desc')}
               onConfirm={() => logout()}
               confirmText={t('navbar.logout_title')}
+              cancelText={t('common.cancel')}
               variant="destructive"
               trigger={
                 <DropdownMenuItem onSelect={(e) => e.preventDefault()} className="text-destructive focus:bg-destructive/10 focus:text-destructive cursor-pointer">
-                  <LogOut className="mr-2 h-4 w-4 ml-2 mr-2" />
+                  <LogOut className="me-2 h-4 w-4" />
                   <span>{t('navbar.logout_title')}</span>
                 </DropdownMenuItem>
               }
             />
+
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

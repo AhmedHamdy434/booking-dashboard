@@ -6,7 +6,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useTranslation } from 'react-i18next';
 
 const LoginPage = lazy(() => import('@/features/auth/LoginPage'));
-const DashboardPage = lazy(() => import('@/pages/DashboardPage'));
+const DashboardPage = lazy(() => import('@/features/dashboard/DashboardPage'));
 const ServicesPage = lazy(() => import('@/features/services/ServicesPage'));
 const NewServicePage = lazy(() => import('@/features/services/NewServicePage'));
 const EditServicePage = lazy(() => import('@/features/services/EditServicePage'));
@@ -19,7 +19,7 @@ const AvailabilityPage = lazy(() => import('@/features/barbers/AvailabilityPage'
 const PageLoader = () => {
   const { t } = useTranslation();
   return (
-    <div className="flex items-center justify-center h-[50vh]">
+    <div className="flex items-center justify-center h-screen">
       <div className="flex flex-col items-center gap-4">
         <Skeleton className="h-12 w-12 rounded-full" />
         <p className="text-sm text-muted-foreground animate-pulse">{t('wizard.loading_page')}</p>

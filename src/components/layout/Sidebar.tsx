@@ -79,7 +79,9 @@ export const Sidebar = () => {
           description={t('common.logout_description')}
           onConfirm={() => logout()}
           confirmText={t('common.logout')}
+          cancelText={t('common.cancel')}
           variant="destructive"
+
           trigger={
             <Button
               variant="ghost"
