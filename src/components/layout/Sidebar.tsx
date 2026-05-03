@@ -4,7 +4,6 @@ import {
   Settings,
   LogOut,
   ClipboardList,
-  Tent,
   CalendarDays,
   Scissors,
   Clock,
@@ -54,11 +53,11 @@ export const Sidebar = () => {
   return (
     <aside className="flex h-full w-full flex-col bg-transparent">
       <div className="flex h-16 items-center gap-2 px-6">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-          <Tent className="h-5 w-5 text-primary-foreground" />
+        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 p-1.5 border border-primary/20">
+          <img src="/icon.svg" alt="Logo" className="h-full w-full object-contain" />
         </div>
         <h1 className="text-xl font-bold tracking-tight text-foreground">
-          Booking<span className="text-primary">App</span>
+          Gold<span className="text-primary">Tan</span>
         </h1>
       </div>
 
